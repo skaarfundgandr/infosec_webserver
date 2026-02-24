@@ -1,33 +1,15 @@
-use crate::domain::models::user::{NewUser, UpdateUser, User};
+use crate::domain::models::user_profile::{NewUserProfile, UpdateUserProfile, UserProfile};
 use crate::infrastructure::database::Database;
 use diesel::prelude::*;
 use diesel::result;
 use diesel_async::scoped_futures::ScopedFutureExt;
 use diesel_async::{AsyncConnection, RunQueryDsl};
 
-pub struct UserRepo;
+pub struct ProfileRepo;
 
-impl UserRepo {
-    pub async fn get_by_id(id: i32) -> Result<Option<User>, result::Error> {
-        use crate::domain::models::schema::users::dsl::{user_id, users};
-
-        let db = Database::new();
-        let mut conn = db.get_connection().await.map_err(|e| {
-            result::Error::DatabaseError(
-                result::DatabaseErrorKind::UnableToSendCommand,
-                Box::new(e.to_string()),
-            )
-        })?;
-
-        match users.filter(user_id.eq(id)).first::<User>(&mut conn).await {
-            Ok(user) => Ok(Some(user)),
-            Err(result::Error::NotFound) => Ok(None),
-            Err(e) => Err(e),
-        }
-    }
-
-    pub async fn get_by_name(name_str: &str) -> Result<Option<User>, result::Error> {
-        use crate::domain::models::schema::users::dsl::{name, users};
+impl ProfileRepo {
+    pub async fn get_by_user_id(id: i32) -> Result<Option<UserProfile>, result::Error> {
+        use crate::domain::models::schema::user_profiles::dsl::{user_id, user_profiles};
 
         let db = Database::new();
         let mut conn = db.get_connection().await.map_err(|e| {
@@ -37,19 +19,19 @@ impl UserRepo {
             )
         })?;
 
-        match users
-            .filter(name.eq(name_str))
-            .first::<User>(&mut conn)
+        match user_profiles
+            .filter(user_id.eq(id))
+            .first::<UserProfile>(&mut conn)
             .await
         {
-            Ok(user) => Ok(Some(user)),
+            Ok(profile) => Ok(Some(profile)),
             Err(result::Error::NotFound) => Ok(None),
             Err(e) => Err(e),
         }
     }
 
-    pub async fn create(new_user: NewUser<'_>) -> Result<(), result::Error> {
-        use crate::domain::models::schema::users::dsl::users;
+    pub async fn create(new_profile: NewUserProfile<'_>) -> Result<(), result::Error> {
+        use crate::domain::models::schema::user_profiles::dsl::user_profiles;
 
         let db = Database::new();
         let mut conn = db.get_connection().await.map_err(|e| {
@@ -62,8 +44,8 @@ impl UserRepo {
         match conn
             .transaction(|connection| {
                 async move {
-                    diesel::insert_into(users)
-                        .values(&new_user)
+                    diesel::insert_into(user_profiles)
+                        .values(&new_profile)
                         .execute(connection)
                         .await?;
 
@@ -78,8 +60,8 @@ impl UserRepo {
         }
     }
 
-    pub async fn update(id: i32, changeset: UpdateUser<'_>) -> Result<(), result::Error> {
-        use crate::domain::models::schema::users::dsl::{user_id, users};
+    pub async fn update(id: i32, changeset: UpdateUserProfile<'_>) -> Result<(), result::Error> {
+        use crate::domain::models::schema::user_profiles::dsl::{user_id, user_profiles};
 
         let db = Database::new();
         let mut conn = db.get_connection().await.map_err(|e| {
@@ -92,7 +74,7 @@ impl UserRepo {
         match conn
             .transaction(|connection| {
                 async move {
-                    diesel::update(users.filter(user_id.eq(id)))
+                    diesel::update(user_profiles.filter(user_id.eq(id)))
                         .set(&changeset)
                         .execute(connection)
                         .await?;

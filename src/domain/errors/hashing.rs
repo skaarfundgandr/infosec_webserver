@@ -4,7 +4,7 @@ use std::fmt::{Display, Formatter};
 pub enum HashingError {
     HashError,
     VerificationError,
-    ParsingError
+    ParsingError,
 }
 
 impl Display for HashingError {
@@ -12,7 +12,7 @@ impl Display for HashingError {
         match self {
             HashingError::HashError => write!(f, "Error hashing password"),
             HashingError::VerificationError => write!(f, "Error verifying password"),
-            HashingError::ParsingError => write!(f, "Error parsing password hash")
+            HashingError::ParsingError => write!(f, "Error parsing password hash"),
         }
     }
 }

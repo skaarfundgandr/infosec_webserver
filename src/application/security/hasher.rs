@@ -37,6 +37,6 @@ pub async fn verify_password(password: &str, hash: &str) -> Result<bool, Hashing
             Err(_) => Err(HashingError::VerificationError),
         }
     })
-        .await
-        .map_err(|_| HashingError::VerificationError)?
+    .await
+    .map_err(|_| HashingError::VerificationError)?
 }
