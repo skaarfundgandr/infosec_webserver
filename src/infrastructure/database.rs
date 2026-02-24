@@ -1,9 +1,9 @@
-use std::env;
 use diesel_async::AsyncMysqlConnection;
 use diesel_async::pooled_connection::AsyncDieselConnectionManager;
 use diesel_async::pooled_connection::deadpool::{Object, Pool, PoolError};
-use once_cell::sync::Lazy;
 use dotenvy::dotenv;
+use once_cell::sync::Lazy;
+use std::env;
 
 pub struct Database {
     pool: Pool<AsyncMysqlConnection>,

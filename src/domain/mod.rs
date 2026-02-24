@@ -1,4 +1,5 @@
+pub mod errors;
+pub mod request;
+pub mod response;
 pub mod schema;
 pub mod user;
-pub mod response;
-pub mod request;

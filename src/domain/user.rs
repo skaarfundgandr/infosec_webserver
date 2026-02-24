@@ -1,5 +1,5 @@
-use diesel::prelude::*;
 use crate::domain::schema::*;
+use diesel::prelude::*;
 
 #[derive(Queryable, Selectable, Identifiable, PartialEq, Eq)]
 #[diesel(table_name = users)]
