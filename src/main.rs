@@ -1,4 +1,6 @@
+use infosec_webserver_lib::presentation::api::server;
+
 #[tokio::main]
 async fn main() {
-    println!("Hello, world!");
+    server::start().await;
 }

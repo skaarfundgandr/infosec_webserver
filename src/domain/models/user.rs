@@ -1,7 +1,8 @@
 use crate::domain::models::schema::*;
 use diesel::prelude::*;
+use serde::Serialize;
 
-#[derive(Queryable, Selectable, Identifiable, PartialEq, Eq)]
+#[derive(Queryable, Selectable, Identifiable, Serialize, PartialEq, Eq, QueryableByName)]
 #[diesel(table_name = users)]
 #[diesel(primary_key(user_id))]
 #[diesel(check_for_backend(diesel::mysql::Mysql))]

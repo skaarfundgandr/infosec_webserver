@@ -1,8 +1,9 @@
 use crate::domain::models::schema::*;
 use crate::domain::models::user::User;
 use diesel::prelude::*;
+use serde::Serialize;
 
-#[derive(Selectable, Queryable, Identifiable, Associations, PartialEq, Eq)]
+#[derive(Selectable, Queryable, Identifiable, Associations, Serialize, PartialEq, Eq)]
 #[diesel(table_name = user_profiles)]
 #[diesel(primary_key(user_id))]
 #[diesel(belongs_to(User, foreign_key = user_id))]
